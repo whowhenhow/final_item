@@ -18,7 +18,7 @@ public class Aboutme extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aboutme);
-
+        //test
         /**切换到首页**/
         ImageView home = (ImageView) findViewById(R.id.mainpage);
         home.setOnClickListener(new View.OnClickListener() {
