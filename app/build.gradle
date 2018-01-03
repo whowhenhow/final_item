@@ -38,7 +38,7 @@ dependencies {
     compile group: 'io.reactivex', name: 'rxandroid', version: '1.2.1'
     compile group: 'com.squareup.retrofit2', name: 'retrofit', version: '2.3.0'
     compile group: 'com.squareup.retrofit2', name: 'adapter-rxjava', version: '2.1.0'
-    compile group: 'com.squareup.retrofit2', name: 'converter-jackson', version: '2.1.0'
+    compile group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.1.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
     compile 'com.alibaba:fastjson:1.2.39'
