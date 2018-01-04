@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.example.whowhenhow.hugleg.Const;
@@ -16,6 +18,7 @@ import com.example.whowhenhow.hugleg.bean.*;
 import com.example.whowhenhow.hugleg.bean.Project;
 import com.example.whowhenhow.hugleg.service.ProjectService;
 import com.example.whowhenhow.hugleg.service.UserService;
+import com.example.whowhenhow.hugleg.util.Util;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -40,6 +43,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Multipart;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.subjects.PublishSubject;
 
 import static android.R.attr.name;
 
@@ -49,55 +53,15 @@ public class MainActivity extends AppCompatActivity {
     private ProjectService projectService;
     private UserService userService;
 
-    //创建OkHttp
-    public static OkHttpClient createOkHttp() {
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
-                .addInterceptor(new Interceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        Request request = chain.request()
-                                .newBuilder()
-                                .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-                                .addHeader("Accept", "*/*")
-                                .addHeader("Accept-Encoding", "gzip, deflate")
-                                .addHeader("Connection", "keep-alive")
-                                .build();
-                        Response response = null;
-                        try {
-                            response = chain.proceed(request);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        String data = "";
-                        if (response.body() != null)
-                            data = response.body().string();
-                        Log.i("data",data);
-                        return response.newBuilder()
-                                .body(ResponseBody.create(MediaType.parse("UTF-8"), data))
-                                .build();
-                    }
-                })
-                .build();
-        return okHttpClient;
-    }
 
-    //创建retrofit
-    private static Retrofit createRetrofit(String baseUrl) {
-        return new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(createOkHttp())
-                .build();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
 
         /**是否已经登陆**/
         SharedPreferences sharedPre = getSharedPreferences("issignin?",Context.MODE_PRIVATE);
@@ -126,45 +90,69 @@ public class MainActivity extends AppCompatActivity {
         });
         /**跳转到首页**/
         Button signin = (Button) findViewById(R.id.signin_button);
+        final EditText user_name = (EditText) findViewById(R.id.user_name);
+        final EditText user_pass = (EditText) findViewById(R.id.user_password);
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPreferences = getSharedPreferences("issignin?", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("flag",1);
-                editor.commit();
-                Intent intent = new Intent(MainActivity.this, MainPage.class);
-                startActivity(intent);
+                String name = user_name.getText().toString();
+                String pass = user_pass.getText().toString();
+                Retrofit retrofit = Util.createRetrofit(Const.BASEURL);
+                userService = retrofit.create(UserService.class);
+                Log.d("TAG", name+" "+pass);
+                userService.login(name,pass)
+                        .subscribeOn(rx.schedulers.Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<Person_info>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                Log.d("tag","error");
+                                Toast.makeText(MainActivity.this,"密码错误或账户不存在",Toast.LENGTH_SHORT).show();
+                            }
+                            @Override
+                            public void onNext(Person_info person_info) {
+                                if(person_info.getUser_account().toString()!=null){
+                                    SharedPreferences sharedPreferences = getSharedPreferences("issignin?", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putInt("flag",1);
+                                    editor.commit();
+                                    Intent intent = new Intent(MainActivity.this, MainPage.class);
+                                    startActivity(intent);
+                                }
+
+                            }
+                        });
+
             }
         });
 
         //测试网络请求——普通请求
-        Retrofit retrofit = createRetrofit(Const.BASEURL);
-        userService = retrofit.create(UserService.class);
 
-//        List<String> user_label = new ArrayList<>();
-//        user_label.add("技术");
-//        user_label.add("产品");
-        userService.getUserInfo("Eric")
-                .subscribeOn(rx.schedulers.Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Person_info>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.i("TAG", "completed");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        Log.e("Error", "error");
-                    }
-
-                    @Override
-                    public void onNext(Person_info person_info) {
-                        Log.i("PersonInfo", person_info.toString());
-                    }
-                });
+//        userService.getUserInfo("Eric")
+//                .subscribeOn(rx.schedulers.Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<Person_info>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        Log.i("TAG", "completed");
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        e.printStackTrace();
+//                        Log.e("Error", "error");
+//                    }
+//
+//                    @Override
+//                    public void onNext(Person_info person_info) {
+//                        Log.i("PersonInfo", person_info.toString());
+//                    }
+//                });
 
         //multipart上传文件或图片，此处是更改用户头像的请求
 //        Retrofit retrofit = createRetrofit(Const.BASEURL);

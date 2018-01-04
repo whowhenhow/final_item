@@ -13,10 +13,18 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activity.MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"
+                    android:noHistory="true"/>
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activity.RegisterActivity">
+
+        </activity>
+        <activity android:name=".activity.MainPage"
+            >
+
         </activity>
     </application>
 
