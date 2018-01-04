@@ -132,27 +132,28 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //测试网络请求——普通请求
+        Retrofit retrofit = Util.createRetrofit(Const.BASEURL);
+        userService = retrofit.create(UserService.class);
+        userService.addUser("Eric4", "123123")
+                .subscribeOn(rx.schedulers.Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Map<String,String>>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.i("TAG", "completed");
+                    }
 
-//        userService.getUserInfo("Eric")
-//                .subscribeOn(rx.schedulers.Schedulers.newThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Subscriber<Person_info>() {
-//                    @Override
-//                    public void onCompleted() {
-//                        Log.i("TAG", "completed");
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        e.printStackTrace();
-//                        Log.e("Error", "error");
-//                    }
-//
-//                    @Override
-//                    public void onNext(Person_info person_info) {
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        Log.e("Error", "error");
+                    }
+
+                    @Override
+                    public void onNext(Map<String,String> person_info) {
 //                        Log.i("PersonInfo", person_info.toString());
-//                    }
-//                });
+                    }
+                });
 
         //multipart上传文件或图片，此处是更改用户头像的请求
 //        Retrofit retrofit = createRetrofit(Const.BASEURL);
