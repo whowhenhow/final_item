@@ -19,12 +19,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.RegisterActivity">
-
+        <activity android:name=".activity.RegisterActivity" android:noHistory="true">
         </activity>
-        <activity android:name=".activity.MainPage"
-            >
-
+        <activity android:name=".activity.MainPage" android:launchMode="singleInstance">
+        </activity>
+        <activity android:name=".activity.Project" android:noHistory="true">
+        </activity>
+        <activity android:name=".activity.Find" android:noHistory="true">
+        </activity>
+        <activity android:name=".activity.Aboutme" android:noHistory="true">
+        </activity>
+        <activity android:name=".activity.User_address" android:noHistory="true">
+        </activity>
+        <activity android:name=".activity.User_Label" android:noHistory="true">
+        </activity>
+        <activity android:name=".activity.User_name" android:noHistory="true">
+        </activity>
+        <activity android:name=".activity.User_password" android:noHistory="true">
+        </activity>
+        <activity android:name=".activity.User_touxiang" android:noHistory="true">
         </activity>
     </application>
 

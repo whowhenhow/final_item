@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.whowhenhow.hugleg.R;
+import com.example.whowhenhow.hugleg.bean.Person_info;
 
 /**
  * Created by 黄国正 on 2017/12/23.
@@ -21,7 +23,8 @@ public class MainPage extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
-
+        final Person_info personInfo = (Person_info)getIntent().getSerializableExtra(MainActivity.SER_KEY);
+       //Log.d("getinfo",personInfo.getUser_account());
         /**菜单点击事件**/
         ImageView more = (ImageView) findViewById(R.id.more);
         final LinearLayout menu = (LinearLayout) findViewById(R.id.menu);
@@ -98,6 +101,9 @@ public class MainPage extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainPage.this, Aboutme.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(MainActivity.SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });

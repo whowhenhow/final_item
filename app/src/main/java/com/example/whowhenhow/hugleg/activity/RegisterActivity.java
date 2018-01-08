@@ -53,6 +53,7 @@ public class RegisterActivity extends AppCompatActivity{
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                Log.d("tag",user_pass.getText().toString()+" "+user_confirm.getText().toString());
                 if(user_pass.getText().toString().equals("")||user_confirm.getText().toString().equals("")){
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                     builder.setTitle("密码不能为空");
@@ -64,7 +65,8 @@ public class RegisterActivity extends AppCompatActivity{
                     });
                     builder.show();
                 }
-                else if(user_pass.getText().toString().equals("user_confirm.toString()")){
+
+                else if(!user_pass.getText().toString().equals(user_confirm.getText().toString())){
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                     builder.setTitle("密码不匹配");
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
