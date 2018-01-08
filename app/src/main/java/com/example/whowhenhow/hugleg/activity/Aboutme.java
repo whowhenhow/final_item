@@ -34,7 +34,7 @@ public class Aboutme extends AppCompatActivity {
         project.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Aboutme.this, Project.class);
+                Intent intent = new Intent(Aboutme.this, ProjectActivity.class);
                 startActivity(intent);
             }
         });

@@ -1,5 +1,6 @@
 package com.example.whowhenhow.hugleg.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by ERIC on 2018/1/3.
  */
 
-public class Project {
+public class Project implements Serializable {
     private int project_id;
     private String project_name;
     private String project_manager_account;

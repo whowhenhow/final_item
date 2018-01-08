@@ -1,6 +1,7 @@
 package com.example.whowhenhow.hugleg.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by 黄国正 on 2017/12/23.
@@ -13,6 +14,8 @@ public class Person_info implements Serializable {
     private String user_introduction;
     private String user_address;
     private String user_avatar;
+    private String user_nickname;
+    private List<Label> user_label;
 
     public int getUser_id() {
         return user_id;
@@ -60,5 +63,21 @@ public class Person_info implements Serializable {
 
     public void setUser_avatar(String user_avatar) {
         this.user_avatar = user_avatar;
+    }
+
+    public String getUser_nickname() {
+        return user_nickname;
+    }
+
+    public void setUser_nickname(String user_nickname) {
+        this.user_nickname = user_nickname;
+    }
+
+    public List<Label> getUser_label() {
+        return user_label;
+    }
+
+    public void setUser_label(List<Label> user_label) {
+        this.user_label = user_label;
     }
 }

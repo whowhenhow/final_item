@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="15dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/projectname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="抱大腿"
+            android:textColor="#000000"
+            android:textSize="30sp"/>
+        <TextView
+            android:id="@+id/manager"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="负责人：黄国正"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/adress"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="所在地址：广州"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/need_person_number"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="所需人数：3-5"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/introduction"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:ellipsize = "end"
+            android:text="世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！"
+            android:textSize="20sp"/>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

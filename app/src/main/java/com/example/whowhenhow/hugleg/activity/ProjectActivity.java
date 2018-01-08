@@ -1,77 +1,119 @@
 package com.example.whowhenhow.hugleg.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.whowhenhow.hugleg.R;
 import com.example.whowhenhow.hugleg.adapter.PersonAdapter;
+import com.example.whowhenhow.hugleg.adapter.ProjectAdapter;
 import com.example.whowhenhow.hugleg.bean.Person_info;
+import com.example.whowhenhow.hugleg.bean.Project;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by 黄国正 on 2017/12/24.
+ * Created by 黄国正 on 2018/1/7.
  */
 
-public class Find extends AppCompatActivity {
-    private List<Person_info> mList = new ArrayList<>();
-    final PersonAdapter adapter = new PersonAdapter(mList, this);
+public class ProjectActivity extends AppCompatActivity{
+    private List<Project> mList = new ArrayList<>();
+    final ProjectAdapter adapter = new ProjectAdapter(mList, this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.find);
+        setContentView(R.layout.project);
+
 
         /**填充列表**/
-        Person_info person_info = new Person_info();
-        person_info.setUser_nickname("hgz");
-        person_info.setUser_address("gzjy");
-        person_info.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-        mList.add(person_info);
-        person_info = new Person_info();
-        person_info.setUser_nickname("huanghaolun");
-        person_info.setUser_address("gzjy");
-        person_info.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-        mList.add(person_info);
-        person_info = new Person_info();
-        person_info.setUser_nickname("huangchengjie");
-        person_info.setUser_address("gzjy");
-        person_info.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-        mList.add(person_info);
-        adapter.setonItemClickListener(new PersonAdapter.OnItemClickListener() {
+        Project project0 = new Project();
+        project0.setNeed_person_number(5);
+        project0.setProject_introduction("世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！");
+        project0.setProject_main_address("广州");
+        project0.setProject_manager_account("和工作");
+        project0.setProject_name("抱大腿");
+        mList.add(project0);
+
+        Project project1 = new Project();
+        project1.setNeed_person_number(5);
+        project1.setProject_introduction("世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！");
+        project1.setProject_main_address("广州");
+        project1.setProject_manager_account("和工作");
+        project1.setProject_name("抱大腿");
+        mList.add(project1);
+
+        Project project2 = new Project();
+        project2.setNeed_person_number(5);
+        project2.setProject_introduction("世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！");
+        project2.setProject_main_address("广州");
+        project2.setProject_manager_account("和工作");
+        project2.setProject_name("抱大腿");
+        mList.add(project2);
+
+        adapter.setonItemClickListener(new ProjectAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("data", mList.get(position));
-                Intent intent = new Intent(Find.this, PersonInfo.class);
+                Intent intent = new Intent(ProjectActivity.this, ProjectInfo.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
-        adapter.setonItemLongClickListener(new PersonAdapter.OnItemLongClickListener() {
+        adapter.setonItemLongClickListener(new ProjectAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View view, int position) {
                 /*mList.remove(position);
                 adapter.notifyDataSetChanged();*/
             }
         });
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.project_view);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        //mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
+
+        /**发布项目**/
+        Button add_project_button = (Button) findViewById(R.id.add_project_button);
+        add_project_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProjectActivity.this, Add_project.class);
+                startActivity(intent);
+            }
+        });
+
+        /**退出登录点击事件**/
+        TextView signout = (TextView) findViewById(R.id.signout);
+        signout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences("issignin?", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("flag",0);
+                editor.commit();
+                Intent intent = new Intent(ProjectActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         /**切换到首页**/
         ImageView home = (ImageView) findViewById(R.id.mainpage);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Find.this, MainPage.class);
+                Intent intent = new Intent(ProjectActivity.this, MainPage.class);
                 startActivity(intent);
             }
         });
@@ -81,7 +123,7 @@ public class Find extends AppCompatActivity {
         project.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Find.this, ProjectActivity.class);
+                Intent intent = new Intent(ProjectActivity.this, ProjectActivity.class);
                 startActivity(intent);
             }
         });
@@ -91,7 +133,7 @@ public class Find extends AppCompatActivity {
         find.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Find.this, Find.class);
+                Intent intent = new Intent(ProjectActivity.this, Find.class);
                 startActivity(intent);
             }
         });
@@ -101,7 +143,7 @@ public class Find extends AppCompatActivity {
         aboutme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Find.this, Aboutme.class);
+                Intent intent = new Intent(ProjectActivity.this, Aboutme.class);
                 startActivity(intent);
             }
         });
@@ -130,24 +172,6 @@ public class Find extends AppCompatActivity {
                 beauty.setTextColor(0xffaaaaaa);
                 product.setTextColor(0xffaaaaaa);
                 manage.setTextColor(0xffaaaaaa);
-                mList.clear();
-                Person_info person_info1 = new Person_info();
-                person_info1.setUser_nickname("whowhenhow");
-                person_info1.setUser_address("gzjy");
-                person_info1.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-                mList.add(person_info1);
-                /*person_info = new Person_info();
-                person_info.setUser_nickname("whowhenhow");
-                person_info.setUser_address("gzjy");
-                person_info.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-                mList.add(person_info);
-                person_info = new Person_info();
-                person_info.setUser_nickname("whowhenhow");
-                person_info.setUser_address("gzjy");
-                person_info.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-                mList.add(person_info);*/
-                adapter.notifyDataSetChanged();
-                Toast.makeText(Find.this, "fuck", Toast.LENGTH_SHORT).show();
             }
         });
         beauty.setOnClickListener(new View.OnClickListener() {

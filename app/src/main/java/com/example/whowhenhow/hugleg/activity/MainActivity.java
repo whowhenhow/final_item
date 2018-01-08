@@ -53,15 +53,14 @@ public class MainActivity extends AppCompatActivity {
     private ProjectService projectService;
     private UserService userService;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-
+        //Intent intent = new Intent(MainActivity.this, MainPage.class);
+        //startActivity(intent);
 
         /**是否已经登陆**/
         SharedPreferences sharedPre = getSharedPreferences("issignin?",Context.MODE_PRIVATE);
