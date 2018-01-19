@@ -1,21 +1,31 @@
 package com.example.whowhenhow.hugleg.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.whowhenhow.hugleg.Const;
 import com.example.whowhenhow.hugleg.R;
 import com.example.whowhenhow.hugleg.adapter.PersonAdapter;
 import com.example.whowhenhow.hugleg.bean.Person_info;
+import com.example.whowhenhow.hugleg.service.UserService;
+import com.example.whowhenhow.hugleg.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Retrofit;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by 黄国正 on 2017/12/24.
@@ -24,27 +34,42 @@ import java.util.List;
 public class Find extends AppCompatActivity {
     private List<Person_info> mList = new ArrayList<>();
     final PersonAdapter adapter = new PersonAdapter(mList, this);
+    private UserService userService;
+    public  final static String SER_KEY = "ser";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.find);
 
+        final Person_info personInfo = (Person_info)getIntent().getSerializableExtra(MainActivity.SER_KEY);
         /**填充列表**/
-        Person_info person_info = new Person_info();
-        person_info.setUser_nickname("hgz");
-        person_info.setUser_address("gzjy");
-        person_info.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-        mList.add(person_info);
-        person_info = new Person_info();
-        person_info.setUser_nickname("huanghaolun");
-        person_info.setUser_address("gzjy");
-        person_info.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-        mList.add(person_info);
-        person_info = new Person_info();
-        person_info.setUser_nickname("huangchengjie");
-        person_info.setUser_address("gzjy");
-        person_info.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-        mList.add(person_info);
+        Retrofit retrofit = Util.createRetrofit(Const.BASEURL);
+        userService = retrofit.create(UserService.class);
+        userService.getLabelUser("技术")
+                .subscribeOn(rx.schedulers.Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Person_info>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        Log.d("tag","error");
+                        //Toast.makeText(MainActivity.this,"密码错误或账户不存在",Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onNext(List<Person_info> person_infos) {
+                        for (int i = 0; i < person_infos.size(); i++){
+                            Person_info person_info = person_infos.get(i);
+                            mList.add(person_info);
+                        }
+                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(Find.this));
+                        recyclerView.setAdapter(adapter);
+                    }
+                });
         adapter.setonItemClickListener(new PersonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -52,6 +77,9 @@ public class Find extends AppCompatActivity {
                 bundle.putSerializable("data", mList.get(position));
                 Intent intent = new Intent(Find.this, PersonInfo.class);
                 intent.putExtras(bundle);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -62,9 +90,7 @@ public class Find extends AppCompatActivity {
                 adapter.notifyDataSetChanged();*/
             }
         });
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+
 
         /**切换到首页**/
         ImageView home = (ImageView) findViewById(R.id.mainpage);
@@ -72,6 +98,9 @@ public class Find extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Find.this, MainPage.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -82,6 +111,9 @@ public class Find extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Find.this, ProjectActivity.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -92,6 +124,9 @@ public class Find extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Find.this, Find.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -102,6 +137,9 @@ public class Find extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Find.this, Aboutme.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -120,6 +158,32 @@ public class Find extends AppCompatActivity {
                 beauty.setTextColor(0xffaaaaaa);
                 product.setTextColor(0xffaaaaaa);
                 manage.setTextColor(0xffaaaaaa);
+                Retrofit retrofit = Util.createRetrofit(Const.BASEURL);
+                userService = retrofit.create(UserService.class);
+                userService.getLabelUser("技术")
+                        .subscribeOn(rx.schedulers.Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<List<Person_info>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                Log.d("tag","error");
+                                //Toast.makeText(MainActivity.this,"密码错误或账户不存在",Toast.LENGTH_SHORT).show();
+                            }
+                            @Override
+                            public void onNext(List<Person_info> person_infos) {
+                                mList.clear();
+                                for (int i = 0; i < person_infos.size(); i++){
+                                    Person_info person_info = person_infos.get(i);
+                                    mList.add(person_info);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
             }
         });
         market.setOnClickListener(new View.OnClickListener() {
@@ -130,24 +194,32 @@ public class Find extends AppCompatActivity {
                 beauty.setTextColor(0xffaaaaaa);
                 product.setTextColor(0xffaaaaaa);
                 manage.setTextColor(0xffaaaaaa);
-                mList.clear();
-                Person_info person_info1 = new Person_info();
-                person_info1.setUser_nickname("whowhenhow");
-                person_info1.setUser_address("gzjy");
-                person_info1.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-                mList.add(person_info1);
-                /*person_info = new Person_info();
-                person_info.setUser_nickname("whowhenhow");
-                person_info.setUser_address("gzjy");
-                person_info.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-                mList.add(person_info);
-                person_info = new Person_info();
-                person_info.setUser_nickname("whowhenhow");
-                person_info.setUser_address("gzjy");
-                person_info.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-                mList.add(person_info);*/
-                adapter.notifyDataSetChanged();
-                Toast.makeText(Find.this, "fuck", Toast.LENGTH_SHORT).show();
+                Retrofit retrofit = Util.createRetrofit(Const.BASEURL);
+                userService = retrofit.create(UserService.class);
+                userService.getLabelUser("市场")
+                        .subscribeOn(rx.schedulers.Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<List<Person_info>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                Log.d("tag","error");
+                                //Toast.makeText(MainActivity.this,"密码错误或账户不存在",Toast.LENGTH_SHORT).show();
+                            }
+                            @Override
+                            public void onNext(List<Person_info> person_infos) {
+                                mList.clear();
+                                for (int i = 0; i < person_infos.size(); i++){
+                                    Person_info person_info = person_infos.get(i);
+                                    mList.add(person_info);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
             }
         });
         beauty.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +230,32 @@ public class Find extends AppCompatActivity {
                 beauty.setTextColor(0xff008875);
                 product.setTextColor(0xffaaaaaa);
                 manage.setTextColor(0xffaaaaaa);
+                Retrofit retrofit = Util.createRetrofit(Const.BASEURL);
+                userService = retrofit.create(UserService.class);
+                userService.getLabelUser("美工")
+                        .subscribeOn(rx.schedulers.Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<List<Person_info>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                Log.d("tag","error");
+                                //Toast.makeText(MainActivity.this,"密码错误或账户不存在",Toast.LENGTH_SHORT).show();
+                            }
+                            @Override
+                            public void onNext(List<Person_info> person_infos) {
+                                mList.clear();
+                                for (int i = 0; i < person_infos.size(); i++){
+                                    Person_info person_info = person_infos.get(i);
+                                    mList.add(person_info);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
             }
         });
         product.setOnClickListener(new View.OnClickListener() {
@@ -168,6 +266,32 @@ public class Find extends AppCompatActivity {
                 beauty.setTextColor(0xffaaaaaa);
                 product.setTextColor(0xff008875);
                 manage.setTextColor(0xffaaaaaa);
+                Retrofit retrofit = Util.createRetrofit(Const.BASEURL);
+                userService = retrofit.create(UserService.class);
+                userService.getLabelUser("产品")
+                        .subscribeOn(rx.schedulers.Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<List<Person_info>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                Log.d("tag","error");
+                                //Toast.makeText(MainActivity.this,"密码错误或账户不存在",Toast.LENGTH_SHORT).show();
+                            }
+                            @Override
+                            public void onNext(List<Person_info> person_infos) {
+                                mList.clear();
+                                for (int i = 0; i < person_infos.size(); i++){
+                                    Person_info person_info = person_infos.get(i);
+                                    mList.add(person_info);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
             }
         });
         manage.setOnClickListener(new View.OnClickListener() {
@@ -178,6 +302,32 @@ public class Find extends AppCompatActivity {
                 beauty.setTextColor(0xffaaaaaa);
                 product.setTextColor(0xffaaaaaa);
                 manage.setTextColor(0xff008875);
+                Retrofit retrofit = Util.createRetrofit(Const.BASEURL);
+                userService = retrofit.create(UserService.class);
+                userService.getLabelUser("运营")
+                        .subscribeOn(rx.schedulers.Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<List<Person_info>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                Log.d("tag","error");
+                                //Toast.makeText(MainActivity.this,"密码错误或账户不存在",Toast.LENGTH_SHORT).show();
+                            }
+                            @Override
+                            public void onNext(List<Person_info> person_infos) {
+                                mList.clear();
+                                for (int i = 0; i < person_infos.size(); i++){
+                                    Person_info person_info = person_infos.get(i);
+                                    mList.add(person_info);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
             }
         });
     }

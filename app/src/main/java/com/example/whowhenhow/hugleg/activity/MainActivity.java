@@ -144,58 +144,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //测试网络请求——普通请求
-//        Retrofit retrofit = Util.createRetrofit(Const.BASEURL);
-//        userService = retrofit.create(UserService.class);
-//        userService.addUser("Eric4", "123123")
-//                .subscribeOn(rx.schedulers.Schedulers.newThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Subscriber<Map<String,String>>() {
-//                    @Override
-//                    public void onCompleted() {
-//                        Log.i("TAG", "completed");
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        e.printStackTrace();
-//                        Log.e("Error", "error");
-//                    }
-//
-//                    @Override
-//                    public void onNext(Map<String,String> person_info) {
-////                        Log.i("PersonInfo", person_info.toString());
-//                    }
-//                });
-
-        //multipart上传文件或图片，此处是更改用户头像的请求
-//        Retrofit retrofit = createRetrofit(Const.BASEURL);
-//        userService = retrofit.create(UserService.class);
-//        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM)
-//                .addFormDataPart("user_id", JSON.toJSONString(1));
-//        File file = new File(); //括号内是从手机本地获取到的资源
-//        builder.addFormDataPart("user_avatar", file.getName(), RequestBody.create(MediaType.parse("image/*"), file);
-//        RequestBody body = builder.build();
-//        userService.changeUserAvatar(body)
-//                .subscribeOn(rx.schedulers.Schedulers.newThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Subscriber<Map<String, String>>() {
-//                    @Override
-//                    public void onCompleted() {
-//                        Log.i("TAG", "completed");
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    @Override
-//                    public void onNext(Map<String, String> stringStringMap) {
-//                        Log.i("URL", stringStringMap.get("user_avatar"));
-//                        //获取到图片URL后 用gilde加载图片出来 路说很简单的 不会百度就行
-//
-//                    }
-//                });
     }
 }

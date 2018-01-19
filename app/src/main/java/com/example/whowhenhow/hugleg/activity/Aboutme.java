@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.whowhenhow.hugleg.R;
 import com.example.whowhenhow.hugleg.bean.Person_info;
+import com.example.whowhenhow.hugleg.bean.Project;
 
 /**
  * Created by 黄国正 on 2017/12/24.
@@ -45,7 +46,7 @@ public class Aboutme extends AppCompatActivity {
         project.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Aboutme.this, Project.class);
+                Intent intent = new Intent(Aboutme.this, ProjectActivity.class);
                 Bundle mBundle = new Bundle();
                 mBundle.putSerializable(SER_KEY,personInfo);
                 intent.putExtras(mBundle);

@@ -25,6 +25,7 @@ import rx.android.schedulers.AndroidSchedulers;
  */
 
 public class User_address extends AppCompatActivity {
+    public  final static String SER_KEY = "ser";
     private UserService userService;
     @Override
     protected void onCreate(Bundle SavedInstanceState){
@@ -80,6 +81,9 @@ public class User_address extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(User_address.this, Aboutme.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });

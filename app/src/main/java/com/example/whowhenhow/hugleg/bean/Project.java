@@ -69,7 +69,7 @@ public class Project implements Serializable {
         return project_label;
     }
 
-    public void setProject_label(List<Label> project_label) {
+    public void setProject_label(List<Label>  project_label) {
         this.project_label = project_label;
     }
 }

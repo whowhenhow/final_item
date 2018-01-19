@@ -48,13 +48,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_weight="1">
-            <ImageView
-                android:id="@+id/more"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_margin="5dp"
-                android:src="@drawable/add"
-                android:layout_gravity="right"/>
         </LinearLayout>
     </LinearLayout>
 

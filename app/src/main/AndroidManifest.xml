@@ -21,7 +21,7 @@
         </activity>
         <activity android:name=".activity.MainPage" android:launchMode="singleInstance">
         </activity>
-        <activity android:name=".activity.Project" android:noHistory="true">
+        <activity android:name=".activity.ProjectActivity" android:noHistory="true">
         </activity>
         <activity android:name=".activity.Find" android:noHistory="true">
         </activity>
@@ -36,6 +36,12 @@
         <activity android:name=".activity.User_password" android:noHistory="true">
         </activity>
         <activity android:name=".activity.User_touxiang" android:noHistory="true">
+        </activity>
+        <activity android:name=".activity.PersonInfo" android:noHistory="true">
+        </activity>
+        <activity android:name=".activity.ProjectInfo" android:noHistory="true">
+        </activity>
+        <activity android:name=".activity.Add_project" android:noHistory="true">
         </activity>
     </application>
 

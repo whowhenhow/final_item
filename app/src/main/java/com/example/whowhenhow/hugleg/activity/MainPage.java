@@ -12,7 +12,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.whowhenhow.hugleg.Const;
 import com.example.whowhenhow.hugleg.R;
 import com.example.whowhenhow.hugleg.adapter.PersonAdapter;
 import com.example.whowhenhow.hugleg.adapter.ProjectAdapter;
@@ -22,6 +24,13 @@ import com.example.whowhenhow.hugleg.bean.Project;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.whowhenhow.hugleg.bean.Person_info;
+import com.example.whowhenhow.hugleg.service.ProjectService;
+import com.example.whowhenhow.hugleg.service.UserService;
+import com.example.whowhenhow.hugleg.util.Util;
+
+import retrofit2.Retrofit;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by 黄国正 on 2017/12/23.
@@ -32,6 +41,8 @@ public class MainPage extends AppCompatActivity{
     final ProjectAdapter adapter = new ProjectAdapter(mList, this);
     private List<Person_info> mList1 = new ArrayList<>();
     final PersonAdapter adapter1 = new PersonAdapter(mList1, this);
+    private ProjectService projectService;
+    private UserService userService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,30 +51,37 @@ public class MainPage extends AppCompatActivity{
        //Log.d("getinfo",personInfo.getUser_account());
 
         /**填充项目列表**/
-        Project project0 = new Project();
-        project0.setNeed_person_number(5);
-        project0.setProject_introduction("世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！");
-        project0.setProject_main_address("广州");
-        project0.setProject_manager_account("和工作");
-        project0.setProject_name("抱大腿");
-        mList.add(project0);
 
-        Project project1 = new Project();
-        project1.setNeed_person_number(5);
-        project1.setProject_introduction("世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！");
-        project1.setProject_main_address("广州");
-        project1.setProject_manager_account("和工作");
-        project1.setProject_name("抱大腿");
-        mList.add(project1);
+        Retrofit retrofit = Util.createRetrofit(Const.BASEURL);
+        projectService = retrofit.create(ProjectService.class);
+        projectService.getRanProject(null)
+                .subscribeOn(rx.schedulers.Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Project>>() {
+                    @Override
+                    public void onCompleted() {
 
-        Project project2 = new Project();
-        project2.setNeed_person_number(5);
-        project2.setProject_introduction("世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！世界第一UI app！");
-        project2.setProject_main_address("广州");
-        project2.setProject_manager_account("和工作");
-        project2.setProject_name("抱大腿");
-        mList.add(project2);
-
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        Log.d("tag","error");
+                    }
+                    @Override
+                    public void onNext(List<Project> projectList) {
+                        for (int i = 0; i < projectList.size(); i++){
+                            Project project = projectList.get(i);
+                            mList.add(project);
+                            //adapter.notifyDataSetChanged();
+                            //Toast.makeText(MainPage.this, project.getProject_introduction(), Toast.LENGTH_SHORT).show();
+                        }
+                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.project_view);
+                        LinearLayoutManager mLayoutManager = new LinearLayoutManager(MainPage.this);
+                        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                        recyclerView.setLayoutManager(mLayoutManager);
+                        recyclerView.setAdapter(adapter);
+                    }
+                });
         adapter.setonItemClickListener(new ProjectAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -71,6 +89,10 @@ public class MainPage extends AppCompatActivity{
                 bundle.putSerializable("data", mList.get(position));
                 Intent intent = new Intent(MainPage.this, ProjectInfo.class);
                 intent.putExtras(bundle);
+                intent.putExtra("flag", 0);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(MainActivity.SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -81,28 +103,37 @@ public class MainPage extends AppCompatActivity{
                 adapter.notifyDataSetChanged();*/
             }
         });
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.project_view);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setAdapter(adapter);
+
 
         /**填充大腿列表**/
-        Person_info person_info = new Person_info();
-        person_info.setUser_nickname("hgz");
-        person_info.setUser_address("gzjy");
-        person_info.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-        mList1.add(person_info);
-        person_info = new Person_info();
-        person_info.setUser_nickname("huanghaolun");
-        person_info.setUser_address("gzjy");
-        person_info.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-        mList1.add(person_info);
-        person_info = new Person_info();
-        person_info.setUser_nickname("huangchengjie");
-        person_info.setUser_address("gzjy");
-        person_info.setUser_introduction("一个他妈的大帅逼，帅到花见花开，车间车爆胎!一个他妈的大帅逼，帅到花见花开，车间车爆胎!");
-        mList1.add(person_info);
+        userService = retrofit.create(UserService.class);
+        userService.getRanUser(null)
+                .subscribeOn(rx.schedulers.Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Person_info>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        Log.d("tag","error");
+                        //Toast.makeText(MainActivity.this,"密码错误或账户不存在",Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onNext(List<Person_info> person_infos) {
+                        for (int i = 0; i < person_infos.size(); i++){
+                            Person_info person_info = person_infos.get(i);
+                            mList1.add(person_info);
+                        }
+                        RecyclerView recyclerView1 = (RecyclerView) findViewById(R.id.person_view);
+                        LinearLayoutManager mLayoutManager1 = new LinearLayoutManager(MainPage.this);
+                        mLayoutManager1.setOrientation(LinearLayoutManager.HORIZONTAL);
+                        recyclerView1.setLayoutManager(mLayoutManager1);
+                        recyclerView1.setAdapter(adapter1);
+                    }
+                });
         adapter1.setonItemClickListener(new PersonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -110,6 +141,10 @@ public class MainPage extends AppCompatActivity{
                 bundle.putSerializable("data", mList1.get(position));
                 Intent intent = new Intent(MainPage.this, PersonInfo.class);
                 intent.putExtras(bundle);
+                intent.putExtra("flag", 0);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(MainActivity.SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -120,11 +155,7 @@ public class MainPage extends AppCompatActivity{
                 adapter.notifyDataSetChanged();*/
             }
         });
-        RecyclerView recyclerView1 = (RecyclerView) findViewById(R.id.person_view);
-        LinearLayoutManager mLayoutManager1 = new LinearLayoutManager(this);
-        mLayoutManager1.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView1.setLayoutManager(mLayoutManager1);
-        recyclerView1.setAdapter(adapter1);
+
 
         /**菜单点击事件**/
         ImageView more = (ImageView) findViewById(R.id.more);
@@ -173,6 +204,9 @@ public class MainPage extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainPage.this, MainPage.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(MainActivity.SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -182,7 +216,10 @@ public class MainPage extends AppCompatActivity{
         project.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainPage.this, Project.class);
+                Intent intent = new Intent(MainPage.this, ProjectActivity.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(MainActivity.SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -193,6 +230,9 @@ public class MainPage extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainPage.this, Find.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(MainActivity.SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });

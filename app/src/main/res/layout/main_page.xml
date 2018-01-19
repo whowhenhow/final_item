@@ -83,7 +83,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/project_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
                 </android.support.v7.widget.RecyclerView>
             </LinearLayout>
 
@@ -104,7 +104,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/person_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </LinearLayout>
@@ -193,25 +193,13 @@
     <LinearLayout
         android:id="@+id/menu"
         android:layout_width="100dp"
-        android:layout_height="70dp"
+        android:layout_height="40dp"
         android:visibility="gone"
         android:layout_below="@+id/header"
         android:layout_alignParentRight="true"
         android:layout_margin="5dp"
         android:orientation="vertical"
         android:background="#ffffff">
-        <TextView
-            android:id="@+id/chatting"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:text="我的对话"
-            android:textSize="20sp"
-            android:gravity="center"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="5dp"
-            android:background="#008875"></LinearLayout>
         <TextView
             android:id="@+id/signout"
             android:layout_width="match_parent"

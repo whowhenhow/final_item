@@ -146,19 +146,20 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
+
         <Button
-            android:id="@+id/beauty"
-            android:textColor="#008875"
-            android:text="美工"
+            android:id="@+id/product"
+            android:textColor="#ffffff"
+            android:text="产品"
             android:textSize="20sp"
             android:layout_margin="2dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
         <Button
-            android:id="@+id/product"
-            android:textColor="#ffffff"
-            android:text="产品"
+            android:id="@+id/beauty"
+            android:textColor="#008875"
+            android:text="美工"
             android:textSize="20sp"
             android:layout_margin="2dp"
             android:layout_width="0dp"

@@ -17,23 +17,38 @@ import com.example.whowhenhow.hugleg.bean.Project;
  */
 
 public class ProjectInfo extends AppCompatActivity {
+    public  final static String SER_KEY = "ser";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.project_information);
 
+        Intent intent = getIntent();
+        final Person_info personInfo = (Person_info)getIntent().getSerializableExtra(MainActivity.SER_KEY);
         /**返回**/
         Button back = (Button) findViewById(R.id.back);
+        final int flag = intent.getIntExtra("flag", 1);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProjectInfo.this, ProjectActivity.class);
-                startActivity(intent);
+                if (flag == 1){
+                    Intent intent = new Intent(ProjectInfo.this, ProjectActivity.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putSerializable(SER_KEY,personInfo);
+                    intent.putExtras(mBundle);
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(ProjectInfo.this, MainPage.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putSerializable(SER_KEY,personInfo);
+                    intent.putExtras(mBundle);
+                    startActivity(intent);
+                }
+
             }
         });
 
         /**绑定数据**/
-        Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         Project project = (Project) bundle.getSerializable("data");
         TextView projectname = (TextView) findViewById(R.id.project_name);
@@ -42,9 +57,41 @@ public class ProjectInfo extends AppCompatActivity {
         TextView manager = (TextView) findViewById(R.id.project_manager);
         TextView introduction = (TextView) findViewById(R.id.introduction);
         projectname.setText(project.getProject_name());
-        adress.setText(project.getProject_main_address());
-        personnumber.setText(project.getNeed_person_number() + "");
-        manager.setText(project.getProject_manager_account());
-        introduction.setText(project.getProject_introduction());
+        adress.setText("地址：" + project.getProject_main_address());
+        personnumber.setText("需要人数：" + project.getNeed_person_number() + "");
+        manager.setText("联系人：" + project.getProject_manager_account());
+        introduction.setText("项目介绍：" + project.getProject_introduction());
+        final Button tech = (Button) findViewById(R.id.tech);
+        final Button market = (Button) findViewById(R.id.market);
+        final Button beauty = (Button) findViewById(R.id.beauty);
+        final Button product = (Button) findViewById(R.id.product);
+        final Button manage = (Button) findViewById(R.id.manage);
+        if (project.getProject_label().equals(null)){
+            tech.setTextColor(0xffaaaaaa);
+            market.setTextColor(0xffaaaaaa);
+            beauty.setTextColor(0xffaaaaaa);
+            product.setTextColor(0xffaaaaaa);
+            manage.setTextColor(0xffaaaaaa);
+        }else{
+            tech.setTextColor(0xffaaaaaa);
+            market.setTextColor(0xffaaaaaa);
+            beauty.setTextColor(0xffaaaaaa);
+            product.setTextColor(0xffaaaaaa);
+            manage.setTextColor(0xffaaaaaa);
+            for (int i = 0; i < project.getProject_label().size(); i++){
+                Project project1 = project;
+                if (project1.getProject_label().get(i).getLabel_name().equals("技术")){
+                    tech.setTextColor(0xff008875);
+                }else if(project1.getProject_label().get(i).getLabel_name().equals("市场")){
+                    market.setTextColor(0xff008875);
+                }else if(project1.getProject_label().get(i).getLabel_name().equals("美工")){
+                    beauty.setTextColor(0xff008875);
+                }else if(project1.getProject_label().get(i).getLabel_name().equals("产品")){
+                    product.setTextColor(0xff008875);
+                }else if(project1.getProject_label().get(i).getLabel_name().equals("运营")){
+                    manage.setTextColor(0xff008875);
+                }
+            }
+        }
     }
 }

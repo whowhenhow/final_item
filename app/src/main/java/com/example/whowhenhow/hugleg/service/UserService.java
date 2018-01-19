@@ -50,4 +50,13 @@ public interface UserService {
     @POST("/changeUserLabel")
     Observable<List<String>> changeUserLabel(@Field("user_id") int userId, @Field("user_label") List<String> userLabel);
 
+    // 由标签获取用户
+    @FormUrlEncoded
+    @POST("/getLabelUser")
+    Observable<List<Person_info>> getLabelUser(@Field("label_name") String labelName);
+
+    // 随机获取5个用户
+    @FormUrlEncoded
+    @POST("/getRanUser")
+    Observable<List<Person_info>> getRanUser(@Field("void") String anything);
 }
