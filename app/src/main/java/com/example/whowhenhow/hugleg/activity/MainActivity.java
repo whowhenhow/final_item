@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     //定义retrofit、okhttp和Service
     private ProjectService projectService;
     private UserService userService;
+    public  final static String SER_KEY = "ser";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String name = user_name.getText().toString();
                 String pass = user_pass.getText().toString();
+                //debug
+
+
+                SharedPreferences sharedPreferences = getSharedPreferences("issignin?", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("flag",1);
+                editor.commit();
+
+                //
                 Retrofit retrofit = Util.createRetrofit(Const.BASEURL);
                 userService = retrofit.create(UserService.class);
                 Log.d("TAG", name+" "+pass);
@@ -121,6 +132,9 @@ public class MainActivity extends AppCompatActivity {
                                     editor.putInt("flag",1);
                                     editor.commit();
                                     Intent intent = new Intent(MainActivity.this, MainPage.class);
+                                    Bundle mBundle = new Bundle();
+                                    mBundle.putSerializable(SER_KEY,person_info);
+                                    intent.putExtras(mBundle);
                                     startActivity(intent);
                                 }
 
@@ -131,11 +145,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //测试网络请求——普通请求
-
-//        userService.getUserInfo("Eric")
+//        Retrofit retrofit = Util.createRetrofit(Const.BASEURL);
+//        userService = retrofit.create(UserService.class);
+//        userService.addUser("Eric4", "123123")
 //                .subscribeOn(rx.schedulers.Schedulers.newThread())
 //                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Subscriber<Person_info>() {
+//                .subscribe(new Subscriber<Map<String,String>>() {
 //                    @Override
 //                    public void onCompleted() {
 //                        Log.i("TAG", "completed");
@@ -148,8 +163,8 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //
 //                    @Override
-//                    public void onNext(Person_info person_info) {
-//                        Log.i("PersonInfo", person_info.toString());
+//                    public void onNext(Map<String,String> person_info) {
+////                        Log.i("PersonInfo", person_info.toString());
 //                    }
 //                });
 

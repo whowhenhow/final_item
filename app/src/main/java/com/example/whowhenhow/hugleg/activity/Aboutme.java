@@ -6,18 +6,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.whowhenhow.hugleg.R;
+import com.example.whowhenhow.hugleg.bean.Person_info;
 
 /**
  * Created by 黄国正 on 2017/12/24.
  */
 
 public class Aboutme extends AppCompatActivity {
+    public  final static String SER_KEY = "ser";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aboutme);
+        TextView user_name = (TextView)findViewById(R.id.user_name);
+        TextView user_account = (TextView)findViewById(R.id.user_account);
+        final Person_info personInfo = (Person_info)getIntent().getSerializableExtra(MainActivity.SER_KEY);
+        user_name.setText(personInfo.getUser_nickname());
+        user_account.setText(personInfo.getUser_account());
         //test
         /**切换到首页**/
         ImageView home = (ImageView) findViewById(R.id.mainpage);
@@ -25,6 +33,9 @@ public class Aboutme extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Aboutme.this, MainPage.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -34,7 +45,10 @@ public class Aboutme extends AppCompatActivity {
         project.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Aboutme.this, ProjectActivity.class);
+                Intent intent = new Intent(Aboutme.this, Project.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -45,6 +59,9 @@ public class Aboutme extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Aboutme.this, Find.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -55,6 +72,9 @@ public class Aboutme extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Aboutme.this, Aboutme.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -65,6 +85,9 @@ public class Aboutme extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Aboutme.this, User_touxiang.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -75,6 +98,9 @@ public class Aboutme extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Aboutme.this, User_address.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -85,6 +111,9 @@ public class Aboutme extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Aboutme.this, User_name.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -95,6 +124,9 @@ public class Aboutme extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Aboutme.this, User_Label.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -105,7 +137,11 @@ public class Aboutme extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Aboutme.this, User_password.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
+
             }
         });
     }

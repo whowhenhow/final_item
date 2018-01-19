@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,10 +21,12 @@ import com.example.whowhenhow.hugleg.bean.Project;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.example.whowhenhow.hugleg.bean.Person_info;
 
 /**
  * Created by 黄国正 on 2017/12/23.
  */
+
 public class MainPage extends AppCompatActivity{
     private List<Project> mList = new ArrayList<>();
     final ProjectAdapter adapter = new ProjectAdapter(mList, this);
@@ -33,6 +36,8 @@ public class MainPage extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
+        final Person_info personInfo = (Person_info)getIntent().getSerializableExtra(MainActivity.SER_KEY);
+       //Log.d("getinfo",personInfo.getUser_account());
 
         /**填充项目列表**/
         Project project0 = new Project();
@@ -177,7 +182,7 @@ public class MainPage extends AppCompatActivity{
         project.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainPage.this, ProjectActivity.class);
+                Intent intent = new Intent(MainPage.this, Project.class);
                 startActivity(intent);
             }
         });
@@ -198,6 +203,9 @@ public class MainPage extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainPage.this, Aboutme.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(MainActivity.SER_KEY,personInfo);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
