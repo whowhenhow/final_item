@@ -41,4 +41,9 @@ public interface ProjectService {
     @FormUrlEncoded
     @POST("/quitProject")
     Observable<Map<String, String>> quitProject(@Field("user_account") String userAccount, @Field("project_id") int projectId);
+
+    // 删除项目
+    @FormUrlEncoded
+    @POST("/deleteProject")
+    Observable<Map<String, String>> deleteProject(@Field("project_id") int projectId);
 }

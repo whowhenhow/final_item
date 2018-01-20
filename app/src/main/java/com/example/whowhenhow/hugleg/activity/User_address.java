@@ -40,7 +40,7 @@ public class User_address extends AppCompatActivity {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String address = adress.getText().toString();
+                final String address = adress.getText().toString();
                 if(address.equals("")){
                     Toast.makeText(User_address.this,"地址不能为空",Toast.LENGTH_SHORT).show();
                 }
@@ -69,6 +69,7 @@ public class User_address extends AppCompatActivity {
                                     }
                                     else{
                                         Toast.makeText(User_address.this,"修改成功！",Toast.LENGTH_SHORT).show();
+                                        personInfo.setUser_address(address);
                                     }
                                 }
                             });

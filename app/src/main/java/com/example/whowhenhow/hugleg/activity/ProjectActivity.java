@@ -25,6 +25,7 @@ import com.example.whowhenhow.hugleg.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Retrofit;
 import rx.Subscriber;
@@ -47,7 +48,7 @@ public class ProjectActivity extends AppCompatActivity{
         final Person_info personInfo = (Person_info)getIntent().getSerializableExtra(MainActivity.SER_KEY);
         /**填充列表**/
 
-        Retrofit retrofit = Util.createRetrofit(Const.BASEURL);
+        final Retrofit retrofit = Util.createRetrofit(Const.BASEURL);
         projectService = retrofit.create(ProjectService.class);
         projectService.getLabelProject("技术")
                 .subscribeOn(rx.schedulers.Schedulers.newThread())
@@ -92,11 +93,33 @@ public class ProjectActivity extends AppCompatActivity{
         });
         adapter.setonItemLongClickListener(new ProjectAdapter.OnItemLongClickListener() {
             @Override
-            public void onItemLongClick(View view, int position) {
+            public void onItemLongClick(View view, final int position) {
                 Project project = mList.get(position);
                 if (project.getProject_manager_account().equals(personInfo.getUser_account())){
-                    mList.remove(position);
-                    adapter.notifyDataSetChanged();
+                    projectService = retrofit.create(ProjectService.class);
+                    projectService.deleteProject(project.getProject_id())
+                            .subscribeOn(rx.schedulers.Schedulers.newThread())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Subscriber<Map<String, String>>() {
+                                @Override
+                                public void onCompleted() {
+
+                                }
+                                @Override
+                                public void onError(Throwable e) {
+                                    e.printStackTrace();
+                                    Log.d("tag","error");
+                                }
+                                @Override
+                                public void onNext(Map<String, String> map) {
+                                    if (map.get("response").equals("success")){
+                                        mList.remove(position);
+                                        adapter.notifyDataSetChanged();
+                                    }else{
+                                        Toast.makeText(ProjectActivity.this, "删除失败！", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                 }else{
                     Toast.makeText(ProjectActivity.this, "您不能删除他人的项目！", Toast.LENGTH_SHORT).show();
                 }

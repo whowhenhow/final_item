@@ -39,7 +39,7 @@ public class User_name extends AppCompatActivity {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nickname = name.getText().toString();
+                final String nickname = name.getText().toString();
                 if(nickname.equals("")){
                     Toast.makeText(User_name.this,"名字不能为空",Toast.LENGTH_SHORT).show();
                 }
@@ -68,6 +68,7 @@ public class User_name extends AppCompatActivity {
                                     }
                                     else{
                                         Toast.makeText(User_name.this,"修改成功！",Toast.LENGTH_SHORT).show();
+                                        personInfo.setUser_nickname(nickname);
                                     }
                                 }
                             });

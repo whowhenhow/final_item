@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.example.whowhenhow.hugleg.Const;
 import com.example.whowhenhow.hugleg.R;
+import com.example.whowhenhow.hugleg.bean.Label;
 import com.example.whowhenhow.hugleg.bean.Person_info;
 import com.example.whowhenhow.hugleg.service.UserService;
 import com.example.whowhenhow.hugleg.util.Util;
@@ -72,6 +73,7 @@ public class User_Label extends AppCompatActivity {
 
                                 @Override
                                 public void onError(Throwable e) {
+                                    Toast.makeText(User_Label.this,"修改失败！",Toast.LENGTH_SHORT).show();
                                     e.printStackTrace();
                                 }
 
@@ -82,6 +84,13 @@ public class User_Label extends AppCompatActivity {
                                     }
                                     else{
                                         Toast.makeText(User_Label.this,"修改成功！",Toast.LENGTH_SHORT).show();
+                                        List<Label> labels = new ArrayList<Label>();
+                                        for (int i = 0; i < labelList.size(); i++){
+                                            Label label = new Label();
+                                            label.setLabel_name(labelList.get(i));
+                                            labels.add(label);
+                                        }
+                                        personInfo.setUser_label(labels);
                                     }
                                 }
                             });
@@ -95,16 +104,22 @@ public class User_Label extends AppCompatActivity {
         final Button product = (Button) findViewById(R.id.product);
         final Button manage = (Button) findViewById(R.id.manage);
         for (int i = 0; i < personInfo.getUser_label().size(); i++){
-            if (personInfo.getUser_label().get(i).getLabel_name().equals("技术")){
+            Person_info personInfo1 = personInfo;
+            if (personInfo1.getUser_label().get(i).getLabel_name().equals("技术")){
                 tech.setTextColor(0xff008875);
-            }else if(personInfo.getUser_label().get(i).getLabel_name().equals("市场")){
+                tech_flag = 1;
+            }else if(personInfo1.getUser_label().get(i).getLabel_name().equals("市场")){
                 market.setTextColor(0xff008875);
-            }else if(personInfo.getUser_label().get(i).getLabel_name().equals("美工")){
+                market_flag = 1;
+            }else if(personInfo1.getUser_label().get(i).getLabel_name().equals("美工")){
                 beauty.setTextColor(0xff008875);
-            }else if(personInfo.getUser_label().get(i).getLabel_name().equals("产品")){
+                beauty_flag = 1;
+            }else if(personInfo1.getUser_label().get(i).getLabel_name().equals("产品")){
                 product.setTextColor(0xff008875);
-            }else if(personInfo.getUser_label().get(i).getLabel_name().equals("运营")){
+                product_flag = 1;
+            }else if(personInfo1.getUser_label().get(i).getLabel_name().equals("运营")){
                 manage.setTextColor(0xff008875);
+                manage_flag = 1;
             }
         }
         tech.setOnClickListener(new View.OnClickListener() {
